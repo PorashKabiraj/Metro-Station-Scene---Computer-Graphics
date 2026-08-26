@@ -3,8 +3,15 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+float carOffset1 = 0.0f;    // upper car
+float carOffset2 = 0.0f;    // lower car
+float trainOffset = -60.0f; // metro
+float cloudOffset1 = 0.0f;  // clouds  group A drifts right
+float cloudOffset2 = 0.0f;  // clouds group B drifts left
+
 void initGL() {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.25f, 0.6f, 0.03f, 1.0f);
 
 }
 
@@ -333,37 +340,40 @@ void stationa()
 
 void pilar()
 {
+
     glBegin(GL_QUADS);
     glColor3ub(200,200,150);
     glVertex2d(160,25);
-    glVertex2d(180,25);
-    glVertex2d(182,52);
+    glVertex2d(175,25);
+    glVertex2d(177,52);
     glVertex2d(158,52);
 
     glVertex2d(150,60);
     glVertex2d(158,52);
-    glVertex2d(182,52);
-    glVertex2d(190,60);
+    glVertex2d(177,52);
+    glVertex2d(185,60);
 
     glVertex2d(150,65);
     glVertex2d(150,60);
-    glVertex2d(190,60);
-    glVertex2d(190,65);
+    glVertex2d(185,60);
+    glVertex2d(185,65);
 
     glEnd();
 
     glBegin(GL_LINES);
     glColor3ub(103,93,40);
-    glVertex2d(182,52);
+    glVertex2d(177,52);
     glVertex2d(164,52);
 
-    glVertex2d(190,60);
+    glVertex2d(185,60);
     glVertex2d(158,60);
     glEnd();
+
 }
 
 void metrorail()
 {
+
     //Main Body
     glBegin(GL_QUADS);
         glColor3ub(245, 245, 242);
@@ -522,13 +532,79 @@ void car()
     drawCircle(10,31,2,20);
     drawCircle(25,31,2,20);
 }
+void drawCloud(float cx, float cy, float scale)
+{
+    glColor3f(0.94f, 0.98f, 0.97f);
+    drawCircle(cx,            cy,        0.18f * scale, 24);
+    drawCircle(cx + 0.18f*scale, cy + 0.05f*scale, 0.14f * scale, 24);
+    drawCircle(cx - 0.16f*scale, cy + 0.03f*scale, 0.13f * scale, 24);
+}
 
+void drawRect(float x1, float y1, float x2, float y2)
+{
+    glBegin(GL_QUADS);
+    glVertex2f(x1, y1);
+    glVertex2f(x2, y1);
+    glVertex2f(x2, y2);
+    glVertex2f(x1, y2);
+    glEnd();
+}
 
+void drawTree(float x, float y, float scale)
+{
+    glColor3f(0.36f, 0.24f, 0.14f);
+    drawRect(x - 0.03f*scale, y - 0.35f*scale, x + 0.03f*scale, y);
+
+    glColor3f(0.12f, 0.40f, 0.22f);
+    drawCircle(x, y + 0.18f*scale, 0.24f*scale, 24);
+    glColor3f(0.08f, 0.32f, 0.18f);
+    drawCircle(x - 0.16f*scale, y + 0.08f*scale, 0.18f*scale, 24);
+    drawCircle(x + 0.16f*scale, y + 0.08f*scale, 0.18f*scale, 24);
+    glColor3f(0.16f, 0.46f, 0.26f);
+    drawCircle(x, y + 0.34f*scale, 0.16f*scale, 24);
+}
+
+void drawTrees()
+{
+    drawTree(20, -1.15f, 30);
+    drawTree(40, -1.15f, 35);
+    drawTree(80, -1.15f, 40);
+    drawTree(120, -1.15f, 30);
+    drawTree(140, -1.15f, 40);
+    drawTree(160, -1.15f, 35);
+    drawTree(190, -1.15f, 30);
+
+    drawTree(40, 37, 35);
+    drawTree(80, 38, 40);
+    drawTree(140, 38, 40);
+    drawTree(160, 37, 35);
+}
+
+void update(int value)
+{
+    carOffset1 += 0.8f;
+    if (carOffset1 > 200.0f) carOffset1 = -30.0f;
+
+    carOffset2 -= 0.8f;
+    if (carOffset2 < -200.0f) carOffset2 = 30.0f;
+
+    trainOffset += 0.6f;
+    if (trainOffset > 120.0f) trainOffset = -60.0f;
+
+    cloudOffset1 += 0.15f;
+    if (cloudOffset1 > 60.0f) cloudOffset1 = -60.0f;
+
+    cloudOffset2 -= 0.15f;
+    if (cloudOffset2 < -60.0f) cloudOffset2 = 60.0f;
+
+    glutPostRedisplay();
+    glutTimerFunc(16, update, 0);
+}
 
 void display() {
     //glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
-    gluOrtho2D(0,200,0,140);
+    gluOrtho2D(0,200,-4,140);
                                                       //ROAD STARTS
     glBegin(GL_QUADS);
     glColor3ub(80,80,100);
@@ -620,16 +696,20 @@ void display() {
 
                                                         //----------------------CARS
 
-        car();
-        glPushMatrix();
-        glTranslated(120,-29,0);
-        car();
-        glPopMatrix();
+       glPushMatrix();
+    glTranslated(carOffset1, 0, 0);
+    car();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslated(120 + carOffset2, -29, 0);  ;
+    car();
+    glPopMatrix();
                                                     //-------------------------END of cars calling
 
         bg();                                      //Background function calling
 
-        stationa();                                  //station function calling
+
                                                     //------------------------------------------Pilars
         pilar();
         glPushMatrix();
@@ -637,12 +717,12 @@ void display() {
         pilar();
         glPopMatrix();
 
-        pilar();
+        /*pilar();
         glPushMatrix();
         glTranslated(-140,0,0);
         pilar();
         glPopMatrix();
-
+*/
         glBegin(GL_QUADS);
         glColor3ub(200,200,150);
         glVertex2d(0,65);
@@ -652,8 +732,22 @@ void display() {
         glEnd();
                                                     //--------------------------------End of pilars
 
-        metrorail();
+        glPushMatrix();
+    glTranslatef(trainOffset, 17, 0);
+    glScalef(0.7f, 0.75f, 1.0f);
+    metrorail();
+        glPopMatrix();                               //-----------------metro
 
+        stationa();                                  //station function calling
+
+
+    drawCloud(60 + cloudOffset1, 120, 30);
+    drawCloud(100 + cloudOffset1, 120, 40);
+    drawCloud(130 + cloudOffset2, 130, 40);
+    drawCloud(40 + cloudOffset2, 115, 40);
+    drawCloud(180 + cloudOffset1, 115, 40);
+
+    drawTrees();                                            //------------Trees
 
         glLoadIdentity();
         glFlush();
@@ -668,6 +762,7 @@ int main(int argc, char** argv) {
     initGL();
 	glutDisplayFunc(display);
 
-	glutMainLoop();
+	glutTimerFunc(0, update, 0);
+    glutMainLoop();
 	return 0;
 }
