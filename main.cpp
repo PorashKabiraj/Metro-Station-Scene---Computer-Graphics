@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <GL/glut.h>
+#include <GL/gl.h>
 #include <stdlib.h>
 #include <math.h>
 #include<iostream>
@@ -21,21 +22,23 @@ float rainY[NUM_DROPS];
 
 void keyboard(unsigned char key, int x, int y)
 {
-    if (key == 'n' || key == 'N')
-        {
-            isNight = 1;
-        }
-    if (key == 'd' || key == 'D')
-    {
-        isNight = 0;
+    if (key == 'n' || key == 'N') {
+        isNight = 1;
+            PlaySound("n2.wav", NULL,SND_ASYNC|SND_FILENAME|SND_LOOP);
     }
-    if (key == 'r' || key == 'R')
-    {
+    if (key == 'd' || key == 'D') {
+        isNight = 0;
+        PlaySound("d.wav", NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+    }
+    if (key == 'r' || key == 'R') {
         isRain = !isRain;
+        if (isRain)
+                PlaySound("r.wav", NULL,SND_ASYNC|SND_FILENAME|SND_LOOP);
+        else
+            PlaySound(NULL, NULL, 0);
     }
     glutPostRedisplay();
 }
-
 void initGL() {
 	glClearColor(0.25f, 0.6f, 0.03f, 1.0f);
 
@@ -45,26 +48,6 @@ void initGL() {
     }
 }
 
-void daysound()
-{
-
-    PlaySound("day.wav", NULL,SND_ASYNC|SND_FILENAME|SND_LOOP);
-
-}
-
-void nightsound()
-{
-
-    PlaySound("night.wav", NULL,SND_ASYNC|SND_FILENAME|SND_LOOP);
-
-}
-
-void rainsound()
-{
-
-    PlaySound("rain.wav", NULL,SND_ASYNC|SND_FILENAME|SND_LOOP);
-
-}
 
 void drawRain()
 {
@@ -77,7 +60,6 @@ void drawRain()
     }
     glEnd();
 
-    rainsound();                        //-----------------------rain sound
 }
 
 void drawDullSky()
@@ -219,7 +201,7 @@ void bgNight()
     glEnd();
 
     //---------------------- Moon
-    drawMoon(166.67f, 128.0f, 7.0f);
+    drawMoon(166.67f, 128.0f, 7.0f);      //moon function calling
 
                             //---------------------------Buildings (darkened)
     glBegin(GL_QUADS);
@@ -293,7 +275,7 @@ void bgNight()
     drawRect(44.0f, 56.0f, 47.0f, 59.0f);
     drawRect(36.0f, 70.0f, 39.0f, 73.0f);
 
-    glColor3ub(255, 196, 90);
+    glColor3ub(0,0,0);
     drawRect(44.0f, 70.0f, 47.0f, 73.0f);
     drawRect(36.0f, 84.0f, 39.0f, 87.0f);
 
@@ -305,98 +287,30 @@ void bgNight()
     glColor3ub(255, 196, 90);
     drawRect(162.0f, 70.0f, 165.0f, 73.0f);
 
-    glColor3ub(255, 214, 120);
+    glPushMatrix();
+    for(int i=5; i<=10; i=i+5){
+    glTranslated(0,i,0);
+    drawRect(162.0f, 70.0f, 165.0f, 73.0f);
+    }
+    glPopMatrix();
+
+    glPushMatrix();
+    for(int i=5; i<=10; i=i+5){
+    glTranslated(0,i,0);
+    drawRect(155.0f, 70.0f, 158.0f, 73.0f);
+    }
+    glPopMatrix();
+
+    glPushMatrix();
+    for(int i=5; i<=10; i=i+5){
+    glTranslated(0,i,0);
     drawRect(180.0f, 56.0f, 183.0f, 59.0f);
     drawRect(188.0f, 56.0f, 191.0f, 59.0f);
-}
-
-void station()
-{
-
-    glBegin(GL_QUADS);
-        glColor3ub(160, 200, 215); // Light Glass Blue
-        glVertex2f(0.0f, 71.0f);
-        glVertex2f(55.0f, 71.0f);
-        glVertex2f(55.0f, 100.0f);
-        glVertex2f(0.0f, 100.0f);
-
-        // Glass Reflection (Diagonal bright stripe)
-        glColor3ub(190, 220, 230);
-        glVertex2f(10.0f, 71.0f);
-        glVertex2f(20.0f, 71.0f);
-        glVertex2f(40.0f, 100.0f);
-        glVertex2f(30.0f, 100.0f);
-    glEnd();
-
-    /* 2. STATION PLATFORM BASE */
-    glBegin(GL_QUADS);
-        glColor3ub(110, 110, 110); // Dark Concrete
-        glVertex2f(0.0f, 50.0f);
-        glVertex2f(55.0f, 50.0f);
-        glVertex2f(55.0f, 69.0f);
-        glVertex2f(0.0f, 69.0f);
-
-        // Yellow safety line at the edge of the platform
-        glColor3ub(230, 200, 0);
-        glVertex2f(0.0f, 69.0f);
-        glVertex2f(55.0f, 69.0f);
-        glVertex2f(55.0f, 71.0f);
-        glVertex2f(0.0f, 71.0f);
-    glEnd();
-
-    /* 3. ROOF SUPPORT PILLARS */
-    glBegin(GL_QUADS);
-        glColor3ub(140, 140, 150); // Steel Pillars
-
-        // Pillar 1
-        glVertex2f(5.0f, 71.0f);  glVertex2f(9.0f, 71.0f);
-        glVertex2f(9.0f, 100.0f); glVertex2f(5.0f, 100.0f);
-
-        // Pillar 2
-        glVertex2f(25.0f, 71.0f);  glVertex2f(29.0f, 71.0f);
-        glVertex2f(29.0f, 100.0f); glVertex2f(25.0f, 100.0f);
-
-        // Pillar 3
-        glVertex2f(45.0f, 71.0f);  glVertex2f(49.0f, 71.0f);
-        glVertex2f(49.0f, 100.0f); glVertex2f(45.0f, 100.0f);
-    glEnd();
-
-    /* 4. STATION ROOF */
-    glBegin(GL_QUADS);
-        glColor3ub(200, 210, 220); // Main roof color
-        glVertex2f(0.0f, 100.0f);  glVertex2f(55.0f, 100.0f);
-        glVertex2f(55.0f, 107.0f); glVertex2f(0.0f, 107.0f);
-
-        // Roof Accent (Green Dhaka Metro Motif)
-        glColor3ub(0, 150, 120);
-        glVertex2f(0.0f, 107.0f);  glVertex2f(55.0f, 107.0f);
-        glVertex2f(55.0f, 110.0f); glVertex2f(0.0f, 110.0f);
-    glEnd();
-
-    /* 5. STATION SIGNBOARD */
-    // Hanging Rods for the board
-    glLineWidth(2.0f);
-    glBegin(GL_LINES);
-        glColor3ub(50, 50, 50);
-        glVertex2f(20.0f, 100.0f); glVertex2f(20.0f, 96.0f);
-        glVertex2f(35.0f, 100.0f); glVertex2f(35.0f, 96.0f);
-    glEnd();
-
-    // The Green Board
-    glBegin(GL_QUADS);
-        glColor3ub(30, 120, 50); // Dark Green
-        glVertex2f(15.0f, 90.0f);  glVertex2f(40.0f, 90.0f);
-        glVertex2f(40.0f, 96.0f);  glVertex2f(15.0f, 96.0f);
-    glEnd();
-
-    // Text: "MOTIJHEEL"
-    glColor3ub(255, 255, 255); // White Text
-    glRasterPos2f(18.5f, 91.5f); // Position perfectly inside the green board
-    const char* stationName = "MOTIJHEEL";
-    for (int i = 0; stationName[i] != '\0'; i++) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, stationName[i]);
     }
+    glPopMatrix();
+
 }
+
 
 void stationa()
 {
@@ -528,7 +442,7 @@ void stationa()
         glVertex2f(19.5f, 93.0f);  glVertex2f(17.5f, 93.0f);
     glEnd();
 
-    // Text: "MOTIJHEEL"
+
     glColor3ub(0, 0, 0); // Black Text
     glRasterPos2f(21.0f, 90.5f); // Positioned next to the logo block
     const char* stationName = "MOTIJHEEL";
@@ -971,7 +885,7 @@ void display() {
 
     drawTrees();                                            //------------Trees
 
-    daysound();                                                       //----day souund
+
 
         glLoadIdentity();
         glFlush();
@@ -1071,9 +985,9 @@ void displayNight() {
 
     drawTrees();
 
-        nightsound();        ///////-------------night sound
 
     glLoadIdentity();
+
     glFlush();
 }
 
@@ -1084,6 +998,7 @@ void renderScene()
     else
         display();
 }
+
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -1096,6 +1011,7 @@ int main(int argc, char** argv) {
     glutDisplayFunc(renderScene);
     glutKeyboardFunc(keyboard);
     glutTimerFunc(0, update, 0);
+
     glutMainLoop();
 
     //cout<<"Press D for Day Scene"<<endl<<"Press N for Night Scene"<<endl<<"Press R for rainy Scene";
