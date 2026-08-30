@@ -15,7 +15,8 @@ float cloudOffset1 = 0.0f;  // clouds  group A drifts right
 float cloudOffset2 = 0.0f;  // clouds group B drifts left
 
 int isNight = 0; // 0 = day, 1 = night
-
+                                                        //moti day night rain
+                                                        //uttara day night rain
 int isRain = 0;
 float rainX[NUM_DROPS];
 float rainY[NUM_DROPS];
@@ -68,10 +69,10 @@ void drawDullSky()
 {
     glColor3ub(120, 125, 130);
     glBegin(GL_QUADS);
-        glVertex2f(0.0f, 98.0f);
-        glVertex2f(200.0f, 98.0f);
-        glVertex2f(200.0f, 140.0f);
-        glVertex2f(0.0f, 140.0f);
+    glVertex2f(0.0f, 98.0f);
+    glVertex2f(200.0f, 98.0f);
+    glVertex2f(200.0f, 140.0f);
+    glVertex2f(0.0f, 140.0f);
     glEnd();
 }
 void drawCircle(float cx, float cy, float r, int segments)
@@ -106,7 +107,7 @@ void drawMoon(float cx, float cy, float r)
     drawCircle(cx + r*0.25f, cy - r*0.15f, r*0.14f, 10);
 }
 
-void bg()
+void bg()                   //day scenario of Motijheel Part
 {
 
 
@@ -318,7 +319,6 @@ void stationa()
 {
 /* =========================================
        DHAKA METRO STATION STYLE (Motijheel)
-       Range: X from 0 to 55, Y from 50 to 110
        ========================================= */
 
     /* 1. MAIN BRICK WALL (Backdrop) */
@@ -451,6 +451,8 @@ void stationa()
     for (int i = 0; stationName[i] != '\0'; i++) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, stationName[i]);
     }
+
+    //PlaySound("utt.wav", NULL,SND_ASYNC|SND_FILENAME);
 }
 
 
@@ -843,6 +845,7 @@ void stationUttara()
     for (int i = 0; stationName[i] != '\0'; i++) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, stationName[i]);
     }
+    //PlaySound("moti.wav", NULL,SND_ASYNC|SND_FILENAME);
 }
 void pilar()
 {
@@ -1092,10 +1095,14 @@ void update(int value)
     carOffset2 -= 0.8f;
     if (carOffset2 < -200.0f) carOffset2 = 30.0f;
 
-    trainOffset += 0.25f;                 // <-- slowed down (was 0.6f)
+    trainOffset += 0.25f;
     if (trainOffset > 120.0f) {
         trainOffset = -60.0f;
-        stationIndex = !stationIndex;     // <-- switch station once train fully exits
+        stationIndex = !stationIndex;
+         if (stationIndex == 0)
+        PlaySound("utt.wav", NULL, SND_ASYNC | SND_FILENAME);
+    else
+        PlaySound("moti.wav", NULL, SND_ASYNC | SND_FILENAME);
     }
 
     cloudOffset1 += 0.15f;
@@ -1224,7 +1231,9 @@ void display() {
     glPopMatrix();
                                                     //-------------------------END of cars calling
 
-        if (stationIndex == 0) bg(); else bgUttara();          //Background function calling
+        if (stationIndex == 0)
+            bg();
+        else bgUttara();          //Background function calling
 
 
                                                     //------------------------------------------Pilars
@@ -1255,7 +1264,9 @@ void display() {
     metrorail();
         glPopMatrix();                               //-----------------metro
 
-        if (stationIndex == 0) stationa(); else stationUttara();          //station function calling
+        if (stationIndex == 0)
+            stationa();
+        else stationUttara();          //station function calling
 
 
     if (isRain) {
@@ -1264,7 +1275,8 @@ void display() {
         drawCloudRain(130 + cloudOffset2, 130, 40);
         drawCloudRain(40 + cloudOffset2, 115, 40);
         drawCloudRain(180 + cloudOffset1, 115, 40);
-    } else {
+    }
+    else {
         drawCloud(60 + cloudOffset1, 120, 30);
         drawCloud(100 + cloudOffset1, 120, 40);
         drawCloud(130 + cloudOffset2, 130, 40);
@@ -1274,8 +1286,7 @@ void display() {
 
     drawTrees();
 
-    if (isRain) drawRain();          // <-- add, right before glLoadIdentity()
-
+    if (isRain) drawRain();
     glLoadIdentity();
     glFlush();
 
@@ -1337,7 +1348,7 @@ void displayNight() {
     car();
     glPopMatrix();
 
-    if (stationIndex == 0) bgNight(); else bgNightUttara();          // <-- only real change
+    if (stationIndex == 0) bgNight(); else bgNightUttara();
 
     pilar();
     glPushMatrix();
@@ -1374,8 +1385,9 @@ void displayNight() {
 
     drawTrees();
 
-    if (isRain) drawRain();
-
+    if (isRain) {
+        drawRain();
+    }
     glLoadIdentity();
     glFlush();
 
@@ -1408,7 +1420,6 @@ int main(int argc, char** argv) {
     cout<<"Welcome to Metro Era."<<endl;
     cout<<"Press D for Day Scene"<<endl<<"Press N for Night Scene"<<endl<<"Press R for Rainy Scene";
     glutMainLoop();
-
 
 	return 0;
 }
