@@ -20,6 +20,8 @@ int isRain = 0;
 float rainX[NUM_DROPS];
 float rainY[NUM_DROPS];
 
+int stationIndex = 0; // 0 = Motijheel, 1 = Uttara Uttar
+
 void keyboard(unsigned char key, int x, int y)
 {
     if (key == 'n' || key == 'N') {
@@ -451,6 +453,397 @@ void stationa()
     }
 }
 
+
+/* ======================================================
+                UTTARA UTTAR DAY BACKGROUND
+   ====================================================== */
+void bgUttara()
+{
+    // ---------------- SKY
+    glBegin(GL_QUADS);
+        glColor3ub(85, 175, 230);
+        glVertex2f(0.0f, 140.0f);
+        glVertex2f(200.0f, 140.0f);
+        glColor3ub(205, 230, 240);
+        glVertex2f(200.0f, 50.0f);
+        glVertex2f(0.0f, 50.0f);
+    glEnd();
+
+    // ---------------- SUN
+    glColor3ub(255, 245, 190);
+    drawCircle(174.0f, 127.0f, 9.0f, 30);
+    glColor3ub(255, 215, 90);
+    drawCircle(174.0f, 127.0f, 6.0f, 30);
+
+    // ---------- Building 1
+    glColor3ub(215, 205, 190);
+    drawRect(3.0f, 50.0f, 23.0f, 90.0f);
+    glColor3ub(185, 180, 170);
+    drawRect(2.0f, 89.0f, 24.0f, 92.0f);
+    glColor3ub(70, 110, 135);
+    drawRect(6, 56, 10, 61);
+    drawRect(15, 56, 19, 61);
+    drawRect(6, 66, 10, 71);
+    drawRect(15, 66, 19, 71);
+    drawRect(6, 76, 10, 81);
+    drawRect(15, 76, 19, 81);
+
+    // ---------- Building 2
+    glColor3ub(185, 200, 210);
+    drawRect(28.0f, 50.0f, 48.0f, 110.0f);
+    glColor3ub(150, 165, 175);
+    drawRect(27.0f, 108.0f, 49.0f, 112.0f);
+    glColor3ub(160, 175, 185);
+    drawRect(34.0f, 112.0f, 42.0f, 117.0f);
+    glColor3ub(60, 100, 125);
+    drawRect(31, 56, 35, 62);
+    drawRect(40, 56, 44, 62);
+    drawRect(31, 68, 35, 74);
+    drawRect(40, 68, 44, 74);
+    drawRect(31, 80, 35, 86);
+    drawRect(40, 80, 44, 86);
+    drawRect(31, 92, 35, 98);
+    drawRect(40, 92, 44, 98);
+
+    // ---------- Building 3
+    glColor3ub(230, 220, 195);
+    drawRect(54.0f, 50.0f, 76.0f, 84.0f);
+    glColor3ub(200, 185, 165);
+    drawRect(53.0f, 82.0f, 77.0f, 86.0f);
+    glColor3ub(85, 115, 130);
+    drawRect(58, 56, 62, 61);
+    drawRect(68, 56, 72, 61);
+    drawRect(58, 67, 62, 72);
+    drawRect(68, 67, 72, 72);
+
+    // ---------- Building 4
+    glColor3ub(195, 190, 180);
+    drawRect(82.0f, 50.0f, 108.0f, 103.0f);
+    glColor3ub(160, 125, 110);
+    drawRect(82.0f, 50.0f, 87.0f, 103.0f);
+    glColor3ub(165, 160, 150);
+    drawRect(81.0f, 101.0f, 109.0f, 105.0f);
+    glColor3ub(55, 90, 115);
+    drawRect(90, 57, 94, 63);
+    drawRect(99, 57, 103, 63);
+    drawRect(90, 69, 94, 75);
+    drawRect(99, 69, 103, 75);
+    drawRect(90, 81, 94, 87);
+    drawRect(99, 81, 103, 87);
+    drawRect(90, 93, 94, 99);
+    drawRect(99, 93, 103, 99);
+
+    // ---------- Building 5
+    glColor3ub(205, 215, 220);
+    drawRect(114.0f, 50.0f, 139.0f, 113.0f);
+    glColor3ub(155, 170, 180);
+    drawRect(113.0f, 110.0f, 140.0f, 114.0f);
+    glColor3ub(100, 130, 140);
+    drawRect(122.0f, 114.0f, 131.0f, 119.0f);
+    glColor3ub(55, 100, 130);
+    drawRect(118, 57, 123, 63);
+    drawRect(130, 57, 135, 63);
+    drawRect(118, 70, 123, 76);
+    drawRect(130, 70, 135, 76);
+    drawRect(118, 83, 123, 89);
+    drawRect(130, 83, 135, 89);
+    drawRect(118, 96, 123, 102);
+    drawRect(130, 96, 135, 102);
+
+    // ---------- Building 6
+    glColor3ub(220, 200, 175);
+    drawRect(145.0f, 50.0f, 165.0f, 89.0f);
+    glColor3ub(185, 165, 145);
+    drawRect(144.0f, 87.0f, 166.0f, 91.0f);
+    glColor3ub(70, 105, 125);
+    drawRect(149, 56, 153, 61);
+    drawRect(158, 56, 162, 61);
+    drawRect(149, 67, 153, 72);
+    drawRect(158, 67, 162, 72);
+    drawRect(149, 78, 153, 83);
+    drawRect(158, 78, 162, 83);
+
+    // ---------- Building 7
+    glColor3ub(185, 200, 205);
+    drawRect(172.0f, 50.0f, 198.0f, 104.0f);
+    glColor3ub(145, 160, 170);
+    drawRect(171.0f, 102.0f, 199.0f, 106.0f);
+    glColor3ub(55, 95, 120);
+    drawRect(176, 57, 181, 63);
+    drawRect(188, 57, 193, 63);
+    drawRect(176, 69, 181, 75);
+    drawRect(188, 69, 193, 75);
+    drawRect(176, 81, 181, 87);
+    drawRect(188, 81, 193, 87);
+    drawRect(176, 93, 181, 99);
+    drawRect(188, 93, 193, 99);
+
+    // ---------------- DISTANT GREEN BELT
+    glColor3ub(70, 135, 65);
+    drawRect(0, 50, 200, 54);
+    glColor3ub(40, 100, 50);
+    drawCircle(12, 55, 4, 20);
+    drawCircle(25, 54, 3, 20);
+    drawCircle(52, 55, 4, 20);
+    drawCircle(72, 54, 3, 20);
+    drawCircle(105, 55, 4, 20);
+    drawCircle(143, 54, 3, 20);
+    drawCircle(168, 55, 4, 20);
+    drawCircle(190, 54, 3, 20);
+}
+
+/* ======================================================
+                UTTARA UTTAR NIGHT BACKGROUND
+   ====================================================== */
+void bgNightUttara()
+{
+    // ---------------- NIGHT SKY
+    glBegin(GL_QUADS);
+        glColor3ub(5, 15, 45);
+        glVertex2f(0.0f, 140.0f);
+        glVertex2f(200.0f, 140.0f);
+        glColor3ub(32, 52, 78);
+        glVertex2f(200.0f, 50.0f);
+        glVertex2f(0.0f, 50.0f);
+    glEnd();
+
+    // ---------------- MOON
+    drawMoon(174.0f, 127.0f, 7.0f);
+
+    // ---------- Building 1
+    glColor3ub(65, 62, 60);
+    drawRect(3.0f, 50.0f, 23.0f, 90.0f);
+    glColor3ub(45, 45, 45);
+    drawRect(2.0f, 89.0f, 24.0f, 92.0f);
+    glColor3ub(255, 210, 100);
+    drawRect(6, 56, 10, 61);
+    drawRect(15, 66, 19, 71);
+    drawRect(6, 76, 10, 81);
+    glColor3ub(20, 28, 38);
+    drawRect(15, 56, 19, 61);
+    drawRect(6, 66, 10, 71);
+    drawRect(15, 76, 19, 81);
+
+    // ---------- Building 2
+    glColor3ub(52, 60, 68);
+    drawRect(28.0f, 50.0f, 48.0f, 110.0f);
+    glColor3ub(38, 44, 50);
+    drawRect(27.0f, 108.0f, 49.0f, 112.0f);
+    glColor3ub(45, 52, 58);
+    drawRect(34.0f, 112.0f, 42.0f, 117.0f);
+    glColor3ub(255, 215, 120);
+    drawRect(31, 56, 35, 62);
+    drawRect(40, 68, 44, 74);
+    drawRect(31, 80, 35, 86);
+    drawRect(40, 92, 44, 98);
+    glColor3ub(15, 25, 35);
+    drawRect(40, 56, 44, 62);
+    drawRect(31, 68, 35, 74);
+    drawRect(40, 80, 44, 86);
+    drawRect(31, 92, 35, 98);
+
+    // ---------- Building 3
+    glColor3ub(70, 65, 55);
+    drawRect(54.0f, 50.0f, 76.0f, 84.0f);
+    glColor3ub(48, 45, 40);
+    drawRect(53.0f, 82.0f, 77.0f, 86.0f);
+    glColor3ub(255, 195, 90);
+    drawRect(58, 56, 62, 61);
+    drawRect(68, 67, 72, 72);
+    glColor3ub(20, 27, 35);
+    drawRect(68, 56, 72, 61);
+    drawRect(58, 67, 62, 72);
+
+    // ---------- Building 4
+    glColor3ub(58, 55, 55);
+    drawRect(82.0f, 50.0f, 108.0f, 103.0f);
+    glColor3ub(55, 38, 35);
+    drawRect(82.0f, 50.0f, 87.0f, 103.0f);
+    glColor3ub(40, 40, 40);
+    drawRect(81.0f, 101.0f, 109.0f, 105.0f);
+    glColor3ub(255, 220, 120);
+    drawRect(90, 57, 94, 63);
+    drawRect(99, 69, 103, 75);
+    drawRect(90, 81, 94, 87);
+    drawRect(99, 93, 103, 99);
+    glColor3ub(15, 23, 32);
+    drawRect(99, 57, 103, 63);
+    drawRect(90, 69, 94, 75);
+    drawRect(99, 81, 103, 87);
+    drawRect(90, 93, 94, 99);
+
+    // ---------- Building 5
+    glColor3ub(50, 60, 66);
+    drawRect(114.0f, 50.0f, 139.0f, 113.0f);
+    glColor3ub(38, 45, 50);
+    drawRect(113.0f, 110.0f, 140.0f, 114.0f);
+    glColor3ub(45, 58, 65);
+    drawRect(122.0f, 114.0f, 131.0f, 119.0f);
+    glColor3ub(255, 205, 100);
+    drawRect(118, 57, 123, 63);
+    drawRect(130, 70, 135, 76);
+    drawRect(118, 83, 123, 89);
+    drawRect(130, 96, 135, 102);
+    glColor3ub(14, 24, 34);
+    drawRect(130, 57, 135, 63);
+    drawRect(118, 70, 123, 76);
+    drawRect(130, 83, 135, 89);
+    drawRect(118, 96, 123, 102);
+
+    // ---------- Building 6
+    glColor3ub(65, 57, 48);
+    drawRect(145.0f, 50.0f, 165.0f, 89.0f);
+    glColor3ub(45, 40, 35);
+    drawRect(144.0f, 87.0f, 166.0f, 91.0f);
+    glColor3ub(255, 215, 110);
+    drawRect(149, 56, 153, 61);
+    drawRect(158, 67, 162, 72);
+    drawRect(149, 78, 153, 83);
+    glColor3ub(18, 25, 32);
+    drawRect(158, 56, 162, 61);
+    drawRect(149, 67, 153, 72);
+    drawRect(158, 78, 162, 83);
+
+    // ---------- Building 7
+    glColor3ub(50, 58, 63);
+    drawRect(172.0f, 50.0f, 198.0f, 104.0f);
+    glColor3ub(38, 44, 48);
+    drawRect(171.0f, 102.0f, 199.0f, 106.0f);
+    glColor3ub(255, 205, 100);
+    drawRect(176, 57, 181, 63);
+    drawRect(188, 69, 193, 75);
+    drawRect(176, 81, 181, 87);
+    drawRect(188, 93, 193, 99);
+    glColor3ub(15, 24, 32);
+    drawRect(188, 57, 193, 63);
+    drawRect(176, 69, 181, 75);
+    drawRect(188, 81, 193, 87);
+    drawRect(176, 93, 181, 99);
+
+    // ---------- DARK GREEN BELT
+    glColor3ub(25, 65, 38);
+    drawRect(0, 50, 200, 54);
+    glColor3ub(15, 45, 28);
+    drawCircle(12, 55, 4, 20);
+    drawCircle(25, 54, 3, 20);
+    drawCircle(52, 55, 4, 20);
+    drawCircle(72, 54, 3, 20);
+    drawCircle(105, 55, 4, 20);
+    drawCircle(143, 54, 3, 20);
+    drawCircle(168, 55, 4, 20);
+    drawCircle(190, 54, 3, 20);
+}
+
+void stationUttara()
+{
+    /* =========================================
+       DHAKA METRO STATION STYLE (Uttara Uttar)
+       ========================================= */
+
+    /* 1. MAIN BRICK WALL */
+    glBegin(GL_QUADS);
+        glColor3ub(165, 75, 55);
+        glVertex2f(0.0f, 71.0f);
+        glVertex2f(55.0f, 71.0f);
+        glVertex2f(55.0f, 95.0f);
+        glVertex2f(0.0f, 95.0f);
+    glEnd();
+
+    /* 2. HORIZONTAL LOUVERS */
+    glBegin(GL_QUADS);
+        glColor3ub(50, 60, 70);
+        glVertex2f(0.0f, 74.0f); glVertex2f(55.0f, 74.0f);
+        glVertex2f(55.0f, 77.0f); glVertex2f(0.0f, 77.0f);
+        glVertex2f(0.0f, 81.0f); glVertex2f(55.0f, 81.0f);
+        glVertex2f(55.0f, 84.0f); glVertex2f(0.0f, 84.0f);
+        glVertex2f(0.0f, 88.0f); glVertex2f(55.0f, 88.0f);
+        glVertex2f(55.0f, 91.0f); glVertex2f(0.0f, 91.0f);
+    glEnd();
+
+    /* 3. VERTICAL PILLARS */
+    glBegin(GL_QUADS);
+        glColor3ub(170, 175, 180);
+        glVertex2f(0.0f, 50.0f);  glVertex2f(4.0f, 50.0f);
+        glVertex2f(4.0f, 97.0f);  glVertex2f(0.0f, 97.0f);
+        glVertex2f(17.0f, 50.0f); glVertex2f(21.0f, 50.0f);
+        glVertex2f(21.0f, 97.0f); glVertex2f(17.0f, 97.0f);
+        glVertex2f(34.0f, 50.0f); glVertex2f(38.0f, 50.0f);
+        glVertex2f(38.0f, 97.0f); glVertex2f(34.0f, 97.0f);
+        glVertex2f(51.0f, 50.0f); glVertex2f(55.0f, 50.0f);
+        glVertex2f(55.0f, 97.0f); glVertex2f(51.0f, 97.0f);
+    glEnd();
+
+    /* 4. TOP BEAM */
+    glBegin(GL_QUADS);
+        glColor3ub(190, 195, 200);
+        glVertex2f(0.0f, 95.0f);  glVertex2f(55.0f, 95.0f);
+        glVertex2f(55.0f, 97.0f); glVertex2f(0.0f, 97.0f);
+    glEnd();
+
+    /* 5. ELEVATED TRACK */
+    glBegin(GL_QUADS);
+        glColor3ub(150, 150, 155);
+        glVertex2f(0.0f, 50.0f);   glVertex2f(55.0f, 50.0f);
+        glVertex2f(55.0f, 69.0f);  glVertex2f(0.0f, 69.0f);
+        glColor3ub(130, 130, 135);
+        glVertex2f(0.0f, 69.0f);   glVertex2f(55.0f, 69.0f);
+        glVertex2f(55.0f, 71.0f);  glVertex2f(0.0f, 71.0f);
+    glEnd();
+
+    /* 6. STEEL TRUSS */
+    glLineWidth(2.5f);
+    glBegin(GL_LINES);
+        glColor3ub(130, 135, 140);
+        glVertex2f(2.0f, 97.0f);   glVertex2f(8.5f, 104.0f);
+        glVertex2f(15.0f, 97.0f);  glVertex2f(8.5f, 104.0f);
+        glVertex2f(8.5f, 97.0f);   glVertex2f(8.5f, 104.0f);
+        glVertex2f(19.0f, 97.0f);  glVertex2f(25.5f, 106.5f);
+        glVertex2f(32.0f, 97.0f);  glVertex2f(25.5f, 106.5f);
+        glVertex2f(25.5f, 97.0f);  glVertex2f(25.5f, 106.5f);
+        glVertex2f(36.0f, 97.0f);  glVertex2f(42.5f, 106.5f);
+        glVertex2f(49.0f, 97.0f);  glVertex2f(42.5f, 106.5f);
+        glVertex2f(42.5f, 97.0f);  glVertex2f(42.5f, 106.5f);
+    glEnd();
+
+    /* 7. GREEN ROOF */
+    glBegin(GL_QUAD_STRIP);
+        glColor3ub(35, 120, 65);
+        glVertex2f(0.0f, 100.0f);  glVertex2f(0.0f, 103.0f);
+        glVertex2f(15.0f, 105.0f); glVertex2f(15.0f, 108.0f);
+        glVertex2f(27.5f, 107.0f); glVertex2f(27.5f, 110.0f);
+        glVertex2f(40.0f, 105.0f); glVertex2f(40.0f, 108.0f);
+        glVertex2f(55.0f, 100.0f); glVertex2f(55.0f, 103.0f);
+    glEnd();
+
+    /* 8. STATION SIGNBOARD */
+    glLineWidth(2.0f);
+    glBegin(GL_LINES);
+        glColor3ub(50, 50, 50);
+        glVertex2f(23.0f, 97.0f); glVertex2f(23.0f, 94.0f);
+        glVertex2f(38.0f, 97.0f); glVertex2f(38.0f, 94.0f);
+    glEnd();
+
+    glBegin(GL_QUADS);
+        glColor3ub(250, 250, 250);
+        glVertex2f(14.0f, 89.0f);  glVertex2f(47.0f, 89.0f);
+        glVertex2f(47.0f, 94.0f);  glVertex2f(14.0f, 94.0f);
+
+        glColor3ub(200, 30, 30);
+        glVertex2f(15.5f, 90.0f);  glVertex2f(17.5f, 90.0f);
+        glVertex2f(17.5f, 93.0f);  glVertex2f(15.5f, 93.0f);
+
+        glColor3ub(0, 150, 70);
+        glVertex2f(17.5f, 90.0f);  glVertex2f(19.5f, 90.0f);
+        glVertex2f(19.5f, 93.0f);  glVertex2f(17.5f, 93.0f);
+    glEnd();
+
+    glColor3ub(0, 0, 0);
+    glRasterPos2f(21.0f, 90.5f);
+    const char* stationName = "UTTARA UTTAR";
+    for (int i = 0; stationName[i] != '\0'; i++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, stationName[i]);
+    }
+}
 void pilar()
 {
 
@@ -699,8 +1092,11 @@ void update(int value)
     carOffset2 -= 0.8f;
     if (carOffset2 < -200.0f) carOffset2 = 30.0f;
 
-    trainOffset += 0.6f;
-    if (trainOffset > 120.0f) trainOffset = -60.0f;
+    trainOffset += 0.25f;                 // <-- slowed down (was 0.6f)
+    if (trainOffset > 120.0f) {
+        trainOffset = -60.0f;
+        stationIndex = !stationIndex;     // <-- switch station once train fully exits
+    }
 
     cloudOffset1 += 0.15f;
     if (cloudOffset1 > 60.0f) cloudOffset1 = -60.0f;
@@ -828,7 +1224,7 @@ void display() {
     glPopMatrix();
                                                     //-------------------------END of cars calling
 
-        bg();                                      //Background function calling
+        if (stationIndex == 0) bg(); else bgUttara();          //Background function calling
 
 
                                                     //------------------------------------------Pilars
@@ -859,7 +1255,7 @@ void display() {
     metrorail();
         glPopMatrix();                               //-----------------metro
 
-        stationa();                                  //station function calling
+        if (stationIndex == 0) stationa(); else stationUttara();          //station function calling
 
 
     if (isRain) {
@@ -941,7 +1337,7 @@ void displayNight() {
     car();
     glPopMatrix();
 
-    bgNight();                                    // <-- only real change
+    if (stationIndex == 0) bgNight(); else bgNightUttara();          // <-- only real change
 
     pilar();
     glPushMatrix();
@@ -960,7 +1356,7 @@ void displayNight() {
     metrorail();
     glPopMatrix();
 
-    stationa();
+    if (stationIndex == 0) stationa(); else stationUttara();
 
         if (isRain) {
         drawCloudRain(60 + cloudOffset1, 120, 30);
@@ -999,7 +1395,6 @@ void renderScene()
         display();
 }
 
-
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutCreateWindow("Metro Era");
@@ -1007,13 +1402,13 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(50, 50);
     initGL();
 	glutDisplayFunc(display);
-
     glutDisplayFunc(renderScene);
     glutKeyboardFunc(keyboard);
     glutTimerFunc(0, update, 0);
-
+    cout<<"Welcome to Metro Era."<<endl;
+    cout<<"Press D for Day Scene"<<endl<<"Press N for Night Scene"<<endl<<"Press R for Rainy Scene";
     glutMainLoop();
 
-    //cout<<"Press D for Day Scene"<<endl<<"Press N for Night Scene"<<endl<<"Press R for rainy Scene";
+
 	return 0;
 }
